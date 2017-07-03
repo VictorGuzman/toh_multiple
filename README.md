@@ -1,44 +1,75 @@
-# Getting Started
+# How is the Angular 2 multiple select dropdown package used?
 
-Super simple Angular app with 1 module and 2 routes 
+- Add the `AngularMultiSelectModule` import in the `app.module` file.
 
-## Get the Code
-```
-git clone https://github.com/johnpapa/angular-tour-of-heroes.git toh
-cd toh
-npm i
-```
-
-### Just in Time (JiT) Compilation
-
-Runs the TypeScript compiler and launches the app
+- In the component that will consume the dropdown component define the following variables:
 
 ```
-npm start
+dropdownList = [];
+selectedItems = [];
+dropdownSettings = {};
 ```
 
-### Ahead of Time (AoT) Compilation 
-
-Runs the Angular AoT compiler, rollup, uglify for an optimized bundle, then launches the app
+- Then use the `onInit` lifecycle to populate the dropdown items and settings. As follows:
 
 ```
-npm run start-aot
+this.dropdownList = [
+    {"id":0,"itemName":"Item 0"},
+    ...
+    {"id":n,"Item N"}
+];
 ```
 
-### AoT + gzip 
-
-Runs AoT plus gzips and launches the app 
-
 ```
-gulp copy-aot-gzip
-npm run aot
-npm run rollup
-http-server
+this.selectedItems = [
+    {"id":0,"itemName":"Item 0"},
+    ...
+    {"id":n,"Item N"}
+];
 ```
 
-Notes:
-- Use your favorite server in place of `http-server`
-- This could be scripted, obviously
-- `lite-server` does not launch gzipped files by default.
+```
+this.dropdownSettings = { 
+    singleSelection: false, 
+    text:"Select Countries",
+    selectAllText:'Select All',
+    unSelectAllText:'UnSelect All',
+    enableSearchFilter: true,
+    classes:"myclass custom-class"
+}; 
+```
 
+- On the same component where the above variables where defined. Define the following event handlers:
 
+```
+onItemSelect(item:any){
+    console.log(item);
+    console.log(this.selectedItems);
+}
+
+OnItemDeSelect(item:any){
+    console.log(item);
+    console.log(this.selectedItems);
+}
+
+onSelectAll(items: any){
+    console.log(items);
+}
+
+onDeSelectAll(items: any){
+    console.log(items);
+}
+```
+
+- Lastly, use the `angular2-multiselect` directive in the template:
+
+```
+<angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" 
+    [settings]="dropdownSettings" 
+    (onSelect)="onItemSelect($event)" 
+    (onDeSelect)="OnItemDeSelect($event)"
+    (onSelectAll)="onSelectAll($event)"
+    (onDeSelectAll)="onDeSelectAll($event)"></angular2-multiselect>
+```
+
+For more info: [click here](https://www.npmjs.com/package/angular2-multiselect-dropdown)
